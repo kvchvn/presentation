@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Electron JS</title>
+  <link rel="shortcut icon" href="assets/images/electron-logo.ico" type="image/x-icon">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <section class="slide_1">
+        <img src="assets/svg/electron-logo.svg" alt="Electron Logo" width="200px" height="200px">
+        <h1 style="letter-spacing: 2px;">Electron</h1>
+        <aside class="notes">
+          Electron is a framework that allows to create cross-platform desktop apps using HTML, CSS, JavaScript and another tools.
+        </aside>
+      </section>
+
+      <section class="slide_2">
+
+        <section class="slide_2-1">
+          Electron is a framework for creating <strong>cross-platform desktop applications</strong> using HTML, CSS, JavaScript and another web-technologies.
+        </section>
+
+        <section class="slide_2-2">
+          It is possible because the Electron combines Chromium engine and Node.js runtime environment.
+        </section>
+
+        <section class="slide_2-3">
+          There are examples of desktop applications that are built on the Electron.
+          <div style="margin-top: 50px; display: flex; justify-content: space-around; align-items: center;">
+            <img class="fragment" src="assets/images/atom.png" alt="Atom Logo" width="120px">
+            <img class="fragment" src="assets/images/discord.png" alt="Discord Logo" width="120px">
+            <img class="fragment" src="assets/images/github.png" alt="Github Logo" width="120px">
+            <img class="fragment" src="assets/images/vscode.png" alt="Visual Studio Code Logo" width="120px">
+          </div>
+        </section>
+
+      </section>
+
+      <section class="slide_3">
+          The structure of an app powered by Electron.
+          <img src="assets/images/app-structure.png" alt="Electron app scheme" width="700px">
+      </section>
+
+      <section class="slide_4">
+        The scheme of how Electron works.
+        <img src="assets/images/electron-scheme.png" alt="How Electron works" width="600px">
+      </section>
+
+      <section class="slide_5">
+
+        <section class="slide_5-1">
+          Let's analyze transfering an app to desktop version on the example of the Art-Quiz.
+          <p class="fragment" style="font-size: 1.8rem;">- Initialize project</p>
+          <pre class="fragment"><code data-trim data-noescape>
+            npm init
+          </code></pre>
+        </section>
+
+        <section class="slide_5-2">
+          <p style="font-size: 1.8rem;">- Create an app</p>
+          <p class="fragment" style="font-size: 1.8rem;">- Install electron and electron-packager</p>
+          <pre class="fragment"><code data-trim data-noescape>
+            npm i -D electron electron-packager
+          </code></pre>
+        </section>
+
+        <section class="slide_5-3">
+          <p style="font-size: 1.8rem;">- Create main.js and coding in it</p>
+          <pre class="fragment"><code data-trim data-noescape data-line-numbers="1-2|4-15|17|19-21">
+            const { app, BrowserWindow } = require('electron');
+            const path = require('path');
+
+            const loadWindow = () => {
+              const window = new BrowserWindow({
+                width: 800,
+                height: 700,
+                fullscreen: true,
+                title: 'Art Quiz',
+                icon: 'assets/icons/favicon.ico',
+                autoHideMenuBar: true
+              });
+
+              window.loadFile(path.join(__dirname, 'index.html'));
+            }
+
+            app.on('ready', loadWindow);
+
+            app.on('window-all-closed', () => {
+              app.quit();
+            })
+          </code></pre>
+        </section>
+
+        <section class="slide_5-4">
+          <p style="font-size: 1.8rem;">- Build the app</p>
+          <pre class="fragment"><code data-trim data-noescape>
+            npx electron-packager .
+          </code></pre>
+          <p class="fragment" style="font-size: 1.8rem;">By default, folder's name will be "[app-name]-win32-x64". And into it you can find our app with .exe extension</p>
+
+        </section>
+
+        <section class="slide_5-5">
+          We did it!
+        </section>
+
+      </section>
+
+      <section class="slide_6">
+
+        <strong>Conclusions</strong>
+        <div class="fragment" >
+          <p>Advantages</p>
+          <ul style="font-size: 1.7rem;">
+            <li>cross-platform</li>
+            <li>not difficult development</li>
+            <li>using web-technologies</li>
+          </ul>
+        </div>
+        <div class="fragment">
+          <p>Disadvantages:</p>
+          <ul style="font-size: 1.7rem;">
+            <li>large installation size</li>
+            <li>uses a lot of RAM</li>
+            <li>has security vulnerabilities</li>
+          </ul>
+        </div>
+
+      </section>
+
+    </div>
+  </div>
+  <script src="index.js"></script>
+</body>
+</html>
