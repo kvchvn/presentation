@@ -7,27 +7,33 @@
   <title>Electron JS</title>
   <link rel="shortcut icon" href="assets/images/electron-logo.ico" type="image/x-icon">
   <link rel="stylesheet" href="main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dosis&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="reveal">
-    <div class="slides">
+    <div class="slides" style="font-family: 'Dosis', sans-serif;">
 
       <section class="slide_1">
         <img src="assets/svg/electron-logo.svg" alt="Electron Logo" width="200px" height="200px">
         <h1 style="letter-spacing: 2px;">Electron</h1>
-        <aside class="notes">
-          Electron is a framework that allows to create cross-platform desktop apps using HTML, CSS, JavaScript and another tools.
-        </aside>
       </section>
 
       <section class="slide_2">
 
         <section class="slide_2-1">
           Electron is a framework for creating <strong>cross-platform desktop applications</strong> using HTML, CSS, JavaScript and another web-technologies.
+          <aside class="notes">
+            Electron is a framework that allows to create cross-platform desktop applications using HTML, CSS, JavaScript and another tools.
+          </aside>
         </section>
 
         <section class="slide_2-2">
           It is possible because the Electron combines Chromium engine and Node.js runtime environment.
+          <aside class="notes">
+            Electron combines Chromium engine and Node.js runtime environment. I will talk about it soon.
+          </aside>
         </section>
 
         <section class="slide_2-3">
@@ -38,18 +44,53 @@
             <img class="fragment" src="assets/images/github.png" alt="Github Logo" width="120px">
             <img class="fragment" src="assets/images/vscode.png" alt="Visual Studio Code Logo" width="120px">
           </div>
+          <aside class="notes">
+            Some of desktop applications that are built on Electron are Atom Text Editor, Discord, GitHub Desktop, Visual Studio Code and others.
+          </aside>
         </section>
 
       </section>
 
       <section class="slide_3">
-          The structure of an app powered by Electron.
-          <img src="assets/images/app-structure.png" alt="Electron app scheme" width="700px">
+
+        The structure of an app powered by Electron.
+        <img src="assets/images/app-structure.png" alt="Electron app scheme" width="700px">
+        <aside class="notes">
+          The structure of an app powered by Electron consists of three main components.
+          Chromium engine is responsible for creating and displaying web pages. Web content is displayed in Renderer process. And due to the Chromium environment you have access to all browser APIs and development tools like in the Google Chrome browser.
+          Node.js – it is the component that gives you access to system capabilities. Electron runs Node.js in its Main process giving you access to all Node.js abilities like interacting with the filesystem, operating system and others. And it also accesses to the large ecosystem of node modules that simplify your app development.
+          The using of native APIs in an Electron app enables developers to create common desktop experiences and to work with native functionalities like creating a context menu, displaying desktop notifications, working with keyboard shortcuts.
+        </aside>
+
       </section>
 
       <section class="slide_4">
-        The scheme of how Electron works.
-        <img src="assets/images/electron-scheme.png" alt="How Electron works" width="600px">
+
+        <section class="slide_4-1">
+          The scheme of how Electron works.
+          <img src="assets/images/electron-scheme.png" alt="How Electron works" width="600px">
+        </section>
+
+        <section class="slide_4-2">
+          <img src="assets/images/main-pocess.png" alt="Main Process" width="700px">
+        </section>
+
+        <section class="slide_4-3">
+          <img src="assets/images/renderer-process.png" alt="Renderer Process" width="700px">
+        </section>
+
+        <aside class="notes">
+          Let's talk about how the Electron works.
+          There are the Main process and several Renderer processes.
+          The entry point of an Electron app is the Main process, which is simply a Node.js environment. This is where all the interactions with native functionality occur.
+          Shortly, the Main process is responsible for creating web pages. It does so by creating an instance of the BrowserWindow class. This action creates a new web page into the window running under influence of the Renderer process. The Main process can be used to create more than one browser window and each window is managed by its own Renderer process. 
+          A Renderer process can also be terminated from the Main process by destroying its BrowserWindow instance.
+          The Renderer processes have access to browser APIs like window or document objects. This is because Renderer process is simply a running Chromium browser instance.
+          For example, in Chrome (or another web browser) each tab and its web page are like a single Renderer process in Electron
+          Connection between both processes is carried out by IPC (inter-process communication).
+          
+        </aside>
+
       </section>
 
       <section class="slide_5">
@@ -60,6 +101,10 @@
           <pre class="fragment"><code data-trim data-noescape>
             npm init
           </code></pre>
+          <aside class="notes">
+            Steps for creating a new desktop application on example of the Art-Quiz:
+            1. npm init – we already know that the Electron JS at the core is the Node.js.
+          </aside>
         </section>
 
         <section class="slide_5-2">
@@ -68,11 +113,15 @@
           <pre class="fragment"><code data-trim data-noescape>
             npm i -D electron electron-packager
           </code></pre>
+          <aside class="notes">
+            2. create an app – in my case the app has ready. And I only place its build in the root directory.
+            3. npm install -D electron electron-packager – this command is needed to install the Electron JS with its packager.
+          </aside>
         </section>
 
         <section class="slide_5-3">
           <p style="font-size: 1.8rem;">- Create main.js and coding in it</p>
-          <pre class="fragment"><code data-trim data-noescape data-line-numbers="1-2|4-15|17|19-21">
+          <pre class="fragment"><code data-trim data-noescape data-line-numbers="1-2|4-13|15">
             const { app, BrowserWindow } = require('electron');
             const path = require('path');
 
@@ -81,20 +130,20 @@
                 width: 800,
                 height: 700,
                 fullscreen: true,
-                title: 'Art Quiz',
-                icon: 'assets/icons/favicon.ico',
-                autoHideMenuBar: true
+                title: 'Art Quiz'
               });
 
               window.loadFile(path.join(__dirname, 'index.html'));
             }
 
             app.on('ready', loadWindow);
-
-            app.on('window-all-closed', () => {
-              app.quit();
-            })
           </code></pre>
+          <aside class="notes">
+            4. create main.js and coding – main.js is an entry point of the project.
+            • there is connection of necessary modules – electron, path;
+            • further there is creating of loadWindow function, inside which window is implemented as instance of BrowserWindow class with some options. And also calls loadFile method of window. 
+            5. Next step we have call the function when the ready event is emitted on the app. The web page needs to wait for this event because some APIs can only be used after that.
+          </aside>
         </section>
 
         <section class="slide_5-4">
@@ -102,12 +151,18 @@
           <pre class="fragment"><code data-trim data-noescape>
             npx electron-packager .
           </code></pre>
-          <p class="fragment" style="font-size: 1.8rem;">By default, folder's name will be "[app-name]-win32-x64". And into it you can find our app with .exe extension</p>
-
+          <p class="fragment" style="font-size: 1.8rem;">By default, folder's name will be "<strong>[app-name]-win32-x64</strong>".<br>
+            And into it you can find our app with <strong>.exe</strong> extension</p>
+          <aside class="notes">
+            6. npx electron-packager – by default, built version will be placing in the root directory.
+          </aside>
         </section>
 
         <section class="slide_5-5">
           We did it!
+          <aside class="notes">
+            it wasn't difficult to get started the Electron JS. You can also integrate Vue, React and other frameworks and libraries to create web pages.
+          </aside>
         </section>
 
       </section>
@@ -131,7 +186,16 @@
             <li>has security vulnerabilities</li>
           </ul>
         </div>
-
+        <aside class="notes">
+          Advantages:
+          Firstly, one of the weightiest reasons to use Electron is its multi-platform developing. You don't need to use different technologies for different platforms. It is also positively for the app management. You can develop apps for all platforms you need in one project and find bugs and problems in one place. It is also true for adding features.
+          Another reason to use Electron is simplify development and lower level of entrance.
+          Can include here possibility of using web ecosystem.
+          Disadvantages:
+          Running Chromium has a cost in the form of memory. Though Chromium is a lightweight version of the Chrome browser, it is still a browser. Node.js also isn't lightweight. Bundling both Chromium and Node.js into an app take a large cost that about 130 MB.
+          Also, the Electron apps are a lot of RAM usage.
+          Earlier, I talked that Electron allows web code to access native APIs. But this fact related with greater security risks. For example, attackers can 
+        </aside>
       </section>
 
     </div>
